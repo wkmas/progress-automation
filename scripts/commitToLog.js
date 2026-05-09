@@ -65,6 +65,11 @@ ${commitMessage}`,
   });
 
   const data = await res.json();
+  console.log('Claude API status:', res.status);
+  console.log('Claude API response:', JSON.stringify(data, null, 2));
+  if (!data.content) {
+    throw new Error(`Claude API エラー: ${JSON.stringify(data)}`);
+  }
   return data.content[0].text;
 }
 
