@@ -52,7 +52,7 @@ async function createDailyLog({ title, projectId, date, commitSha, summary }) {
         Title: {
           title: [{ text: { content: title } }],
         },
-        Project: {
+        Projects: {
           relation: [{ id: projectId }],
         },
         Date: {
