@@ -1,0 +1,29 @@
+name: Commit to Daily Log
+
+on:
+  repository_dispatch:
+    types: [commit_pushed]
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run commitToLog
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DAILY_LOGS_DB_ID: ${{ secrets.NOTION_DAILY_LOGS_DB_ID }}
+          NOTION_PROJECTS_DB_ID: ${{ secrets.NOTION_PROJECTS_DB_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REPO_URL: ${{ github.event.client_payload.repo_url }}
+          COMMIT_SHA: ${{ github.event.client_payload.commit_sha }}
+          COMMIT_MESSAGE: ${{ github.event.client_payload.commit_message }}
+          AUTHOR: ${{ github.event.client_payload.author }}
+          TIMESTAMP: ${{ github.event.client_payload.timestamp }}
+          BRANCH: ${{ github.event.client_payload.branch }}
+        run: node scripts/commitToLog.js
