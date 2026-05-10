@@ -82,21 +82,6 @@ async function createDailyLog({ title, projectId, date, commitSha, summary }) {
 async function main() {
   console.log(`処理開始: ${REPO_URL} / ${COMMIT_SHA}`);
 
-  // デバッグ: DB スキーマ確認
-  for (const [label, dbId] of [['DAILY_LOGS', NOTION_DAILY_LOGS_DB_ID], ['PROJECTS', NOTION_PROJECTS_DB_ID]]) {
-    const dbRes = await fetch(`https://api.notion.com/v1/databases/${dbId}`, {
-      headers: {
-        Authorization: `Bearer ${NOTION_TOKEN}`,
-        'Notion-Version': '2022-06-28',
-      },
-    });
-    const dbData = await dbRes.json();
-    const title = dbData.title?.[0]?.plain_text ?? '(no title)';
-    const propKeys = Object.keys(dbData.properties ?? {});
-    console.log(`[${label}] title: ${title}`);
-    console.log(`[${label}] properties: ${JSON.stringify(propKeys)}`);
-  }
-
   // プロジェクト検索
   const project = await findProject(REPO_URL);
   const projectId = project.id;
