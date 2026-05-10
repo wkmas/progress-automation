@@ -1,0 +1,26 @@
+name: Daily TODO
+
+on:
+  schedule:
+    # 毎朝 8:00 JST（= 23:00 UTC 前日）に実行
+    - cron: '0 23 * * *'
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  todo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate daily TODO
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_TASKS_DB_ID: ${{ secrets.NOTION_TASKS_DB_ID }}
+          NOTION_DAILY_LOGS_DB_ID: ${{ secrets.NOTION_DAILY_LOGS_DB_ID }}
+          NOTION_TODO_PAGE_ID: ${{ secrets.NOTION_TODO_PAGE_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/dailyTodo.js
