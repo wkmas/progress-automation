@@ -1,5 +1,7 @@
 // scripts/commitToLog.js
-// コミット情報を受け取り、Claude API で要約して Notion Daily Logs に書き込む
+// コミット情報を受け取り、LLM で要約して Notion Daily Logs に書き込む
+
+const { generateText } = require('./llm');
 
 const {
   NOTION_TOKEN,
@@ -88,7 +90,15 @@ async function main() {
   const projectName = project.properties.Name.title[0]?.plain_text ?? '不明なプロジェクト';
   console.log(`プロジェクト発見: ${projectName}`);
 
-  const summary = COMMIT_MESSAGE;
+  const prompt = `以下はプロジェクト「${projectName}」のGitコミットメッセージです。
+このコミットで何をしたかを、開発者が後から振り返りやすいよう日本語で2〜3文に要約してください。
+技術的な内容はそのまま残し、簡潔にまとめてください。
+
+コミットメッセージ:
+${COMMIT_MESSAGE}`;
+
+  const summary = await generateText(prompt);
+  console.log(`要約完了: ${summary}`);
 
   // 日付をISO形式に変換（YYYY-MM-DD）
   const date = new Date(TIMESTAMP).toISOString().split('T')[0];

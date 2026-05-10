@@ -19,7 +19,7 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DAILY_LOGS_DB_ID: ${{ secrets.NOTION_DAILY_LOGS_DB_ID }}
           NOTION_PROJECTS_DB_ID: ${{ secrets.NOTION_PROJECTS_DB_ID }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           REPO_URL: ${{ github.event.client_payload.repo_url }}
           COMMIT_SHA: ${{ github.event.client_payload.commit_sha }}
           COMMIT_MESSAGE: ${{ github.event.client_payload.commit_message }}
